@@ -1,2 +1,15 @@
 ---
-# tasks file for k8s-kubeadm-kubectl-conf
+- name: create kube folder
+  local_action: shell mkdir -p ~/.kube
+
+- name: fetch kubectl conf
+  fetch:
+    src: /etc/kubernetes/admin.conf
+    dest: ~/.kube/config
+    flat: yes
+
+- name: configure kubectl autocomplete
+  local_action:
+    module: lineinfile
+    path: ~/.bashrc
+    line: source <(kubectl completion bash)
